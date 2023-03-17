@@ -1,0 +1,21 @@
+
+
+chrome.browserAction.onClicked.addListener(function(tab) {
+  chrome.tabs.executeScript({
+    code: 'var song = document.querySelector("audio").src;'
+  }, function() {
+    chrome.tabs.executeScript({
+      code: 'var xhr = new XMLHttpRequest();' +
+            'xhr.open("GET", "https://api.lyrics.ovh/v1/" + artist + "/" + title);' +
+            'xhr.onload = function() {' +
+            '  if (xhr.status === 200) {' +
+            '    var lyrics = JSON.parse(xhr.responseText).lyrics;' +
+            '    var coverArtUrl = "https://coverartarchive.org/release/" + mbid;' +
+            '    chrome.tabs.create({url: coverArtUrl});' +
+            '    alert(lyrics);' +
+            '  }' +
+            '};' +
+            'xhr.send();'
+    });
+  });
+});
